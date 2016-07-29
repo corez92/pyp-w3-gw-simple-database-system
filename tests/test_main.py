@@ -50,8 +50,7 @@ class SimpleDatabaseTestCase(unittest.TestCase):
         self.assertEqual(db.authors.count(), 2)
 
     def test_create_database_duplicated_name(self):
-        with self.assertRaisesRegexp(ValidationError,
-                                     'Database with name "library" already exists.'):
+        with self.assertRaisesRegexp(ValidationError,'Database with name "library" already exists.'):
             create_database('library')
 
     def test_connect_existing_database(self):

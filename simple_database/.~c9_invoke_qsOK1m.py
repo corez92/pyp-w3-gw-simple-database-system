@@ -1,28 +1,13 @@
-import pickle
-import os
-from config import BASE_DB_FILE_PATH
-
 from operator import attrgetter
 from exceptions import ValidationError
 
 def create_database(db_name):
-    current = os.getcwd()
-    os.chdir("home/ubuntu/workspace" + BASE_DB_FILE_PATH)
-    
-    if os.path.isfile(db_name):
+    if db_name in Database.all_dbs:
         raise ValidationError('Database with name "{}" already exists.'.format(db_name))
-    db_instance = Database(db_name)
-    
-    with open(db_name,'wb') as fileObject:
-        pickle.dump(db_instance,fileObject)
-    
-    os.chdir(current)
-    return db_instance
+    return Database(db_name)
 
 def connect_database(db_name):
-    with open(db_name,'r') as fileObject:
-        db_connect = pickle.load(fileObject)
-    return db_connect
+    pass
 
 class Database(object):
     
@@ -31,7 +16,7 @@ class Database(object):
     def __init__(self, db_name):
         self.db_name = db_name
         self.all_tables = {}
-    
+        p
     def create_table(self, table_name, columns=None):
         if not columns:
             raise Exception
@@ -39,10 +24,6 @@ class Database(object):
             # create a new attribute
             setattr(self, table_name, Table(table_name, columns))
             self.all_tables[table_name] = Table(table_name, columns)
-            with open(self.db_name,'wb') as fileObject:
-                pickle.dump(self,fileObject)
-            
-            
     
     def show_tables(self):
         return [table for table in self.all_tables]
@@ -63,7 +44,7 @@ class Table(object):
             if self.fields[index]['type'] != cell_type :
                 return 'Invalid type of field "{}": Given "{}", expected "{}"'.format(
                         self.fields[index]['name'], cell_type, self.fields[index]['type'])
-        return ""
+                return ""
                 
     def count(self):
         return len(self.table)
@@ -91,9 +72,10 @@ class Table(object):
         
     def query(self, **kwargs):
         key, value = kwargs.items()[0]
-        return [entry for entry in self.table if getattr(entry,key) == value]
+TABLE
     
 class Row(object):
     def __init__(self,a_row):
+         
         for key in a_row:
             setattr(self,key,a_row[key])
